@@ -3703,35 +3703,36 @@
   function openPixModal() {
     hidePaymentSelector();
     const total = getCartTotal();
-    document.getElementById('pixAmountValue').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
-    document.getElementById('pixAmountDest').textContent = `→ ${selectedShelter}`;
-
-    // Reset screens
-    document.getElementById('pixEmailScreen').style.display = 'block';
-    document.getElementById('pixScreen').style.display = 'none';
-    document.getElementById('pixConfirmingScreen').style.display = 'none';
-    document.getElementById('pixErrorScreen').style.display = 'none';
-    document.getElementById('pixEmailError').style.display = 'none';
-    document.getElementById('pixGenerateBtn').disabled = false;
-    document.getElementById('pixGenerateBtn').textContent = '🔄 Gerar QR Code Pix';
+    
+    var el;
+    el = document.getElementById('pixAmountValue'); if (el) el.textContent = 'R$ ' + total.toFixed(2).replace('.',',');
+    el = document.getElementById('pixAmountDest'); if (el) el.textContent = '→ ' + selectedShelter;
+    el = document.getElementById('pixEmailScreen'); if (el) el.style.display = 'block';
+    el = document.getElementById('pixScreen'); if (el) el.style.display = 'none';
+    el = document.getElementById('pixConfirmingScreen'); if (el) el.style.display = 'none';
+    el = document.getElementById('pixErrorScreen'); if (el) el.style.display = 'none';
+    el = document.getElementById('pixEmailError'); if (el) el.style.display = 'none';
+    el = document.getElementById('pixGenerateBtn'); if (el) { el.disabled = false; el.textContent = '🔄 Gerar QR Code Pix'; }
 
     document.getElementById('pixModal').classList.add('active');
   }
 
   async function generateRealPix() {
-    const email = document.getElementById('pixEmailInput').value.trim();
+    const emailInput = document.getElementById('pixEmailInput');
+    const email = emailInput ? emailInput.value.trim() : '';
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!email || !emailRegex.test(email)) {
-      document.getElementById('pixEmailError').style.display = 'block';
-      document.getElementById('pixEmailInput').style.borderColor = '#e8621a';
+      const errEl = document.getElementById('pixEmailError');
+      if (errEl) errEl.style.display = 'block';
+      if (emailInput) emailInput.style.borderColor = '#e8621a';
       return;
     }
-    document.getElementById('pixEmailError').style.display = 'none';
+    const errEl2 = document.getElementById('pixEmailError');
+    if (errEl2) errEl2.style.display = 'none';
 
     const btn = document.getElementById('pixGenerateBtn');
-    btn.disabled = true;
-    btn.textContent = '⏳ Gerando PIX...';
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Gerando PIX...'; }
 
     const total = getCartTotal();
     const itemNames = Object.values(cart).map(i => i.name).join(', ');
@@ -3742,13 +3743,18 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           amount: total,
-          description: `Doação Gatinhos do Rio - ${selectedShelter} - ${itemNames}`,
+          description: 'Doacao Gatinhos do Rio - ' + (selectedShelter || 'Abrigo') + ' - ' + itemNames,
           shelter: selectedShelter,
           email: email
         })
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch(jsonErr) {
+        throw new Error('Servidor retornou resposta inválida. Verifique se a API está configurada.');
+      }
 
       if (!response.ok || !data.success) {
         throw new Error(data.error || 'Erro ao gerar PIX');
@@ -3757,48 +3763,56 @@
       // Sucesso - mostrar QR Code
       pixPaymentId = data.payment_id;
 
-      document.getElementById('pixAmountValue2').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
-      document.getElementById('pixAmountDest2').textContent = `→ ${selectedShelter}`;
+      const av2 = document.getElementById('pixAmountValue2');
+      if (av2) av2.textContent = 'R$ ' + total.toFixed(2).replace('.',',');
+      const ad2 = document.getElementById('pixAmountDest2');
+      if (ad2) ad2.textContent = '→ ' + selectedShelter;
 
       // Mostrar QR Code real (base64)
       if (data.qr_code_base64) {
         const qrImg = document.getElementById('pixQrImage');
-        qrImg.src = `data:image/png;base64,${data.qr_code_base64}`;
-        qrImg.style.display = 'block';
-        // Esconder canvas fake
-        document.getElementById('qrCanvas').style.display = 'none';
+        if (qrImg) {
+          qrImg.src = 'data:image/png;base64,' + data.qr_code_base64;
+          qrImg.style.display = 'block';
+        }
+        const qrCanvas = document.getElementById('qrCanvas');
+        if (qrCanvas) qrCanvas.style.display = 'none';
       }
 
       // Código copia e cola
       if (data.qr_code) {
-        document.getElementById('pixKeyVal').textContent = data.qr_code;
+        const pkv = document.getElementById('pixKeyVal');
+        if (pkv) pkv.textContent = data.qr_code;
       }
 
       // Trocar tela
-      document.getElementById('pixEmailScreen').style.display = 'none';
-      document.getElementById('pixScreen').style.display = 'block';
+      const es = document.getElementById('pixEmailScreen');
+      if (es) es.style.display = 'none';
+      const ps = document.getElementById('pixScreen');
+      if (ps) ps.style.display = 'block';
 
       // Iniciar timer
       pixTimerSecs = 600;
       updateTimerDisplay();
       clearInterval(pixTimerInterval);
-      pixTimerInterval = setInterval(() => {
+      pixTimerInterval = setInterval(function() {
         pixTimerSecs--;
         updateTimerDisplay();
         if (pixTimerSecs <= 0) {
           clearInterval(pixTimerInterval);
           clearInterval(pixCheckInterval);
-          document.getElementById('timerNum').textContent = 'Expirado!';
-          document.getElementById('timerNum').style.color = '#e8621a';
+          var tn = document.getElementById('timerNum');
+          if (tn) { tn.textContent = 'Expirado!'; tn.style.color = '#e8621a'; }
         }
       }, 1000);
 
       // Verificar automaticamente se pagou (a cada 5 segundos)
-      document.getElementById('pixStatusMsg').style.display = 'block';
+      var sm = document.getElementById('pixStatusMsg');
+      if (sm) sm.style.display = 'block';
       clearInterval(pixCheckInterval);
-      pixCheckInterval = setInterval(async () => {
+      pixCheckInterval = setInterval(async function() {
         try {
-          const statusRes = await fetch(`/api/status?id=${pixPaymentId}`);
+          const statusRes = await fetch('/api/status?id=' + pixPaymentId);
           const statusData = await statusRes.json();
           if (statusData.paid) {
             clearInterval(pixCheckInterval);
@@ -3810,9 +3824,12 @@
 
     } catch (error) {
       console.error('Erro PIX:', error);
-      document.getElementById('pixEmailScreen').style.display = 'none';
-      document.getElementById('pixErrorScreen').style.display = 'block';
-      document.getElementById('pixErrorMsg').textContent = error.message || 'Erro ao gerar PIX. Tente novamente.';
+      var pes = document.getElementById('pixEmailScreen');
+      if (pes) pes.style.display = 'none';
+      var per = document.getElementById('pixErrorScreen');
+      if (per) per.style.display = 'block';
+      var pem = document.getElementById('pixErrorMsg');
+      if (pem) pem.textContent = (error && error.message) ? error.message : 'Erro ao gerar PIX. Tente novamente.';
     }
   }
 
