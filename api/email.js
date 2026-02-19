@@ -91,7 +91,7 @@ module.exports = async function handler(req, res) {
         'Authorization': 'Bearer ' + RESEND_KEY
       },
       body: JSON.stringify({
-        from: 'Gatinhos do Rio <onboarding@resend.dev>',
+        from: 'Gatinhos do Rio <contato@gatinhosdorio.com.br>',
         to: [email],
         subject: '🐱 Obrigado pela doação! — Gatinhos do Rio',
         html: donorHtml
@@ -119,7 +119,7 @@ module.exports = async function handler(req, res) {
           'Authorization': 'Bearer ' + RESEND_KEY
         },
         body: JSON.stringify({
-          from: 'Gatinhos do Rio <onboarding@resend.dev>',
+          from: 'Gatinhos do Rio <contato@gatinhosdorio.com.br>',
           to: [OWNER_EMAIL],
           subject: '🐱 Nova doação: R$ ' + total.toFixed(2).replace('.', ',') + ' — ' + shelter,
           html: ownerHtml
