@@ -2772,6 +2772,11 @@
         <span class="sol-dot"></span> Rede: <strong>Solana Mainnet</strong> &nbsp;|&nbsp; Token: <strong>SOL nativo</strong>
       </div>
 
+      <div style="margin:12px 0;">
+        <label style="display:block;font-size:0.75rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;text-align:left;">📧 Seu email (para receber comprovante)</label>
+        <input type="email" id="solEmailInput" placeholder="seu@email.com" style="width:100%;padding:12px 16px;border-radius:12px;border:2px solid rgba(153,69,255,0.3);background:rgba(255,255,255,0.05);color:white;font-family:'Baloo 2',cursive;font-size:0.95rem;outline:none;box-sizing:border-box;" onfocus="this.style.borderColor='#9945FF'" onblur="this.style.borderColor='rgba(153,69,255,0.3)'">
+      </div>
+
       <div class="pix-steps" style="background:rgba(255,255,255,0.05); border-color:rgba(0,255,163,0.2);">
         <div class="pix-steps-title" style="color:rgba(255,255,255,0.35)">Como enviar SOL</div>
         <div class="pix-step-item" style="color:rgba(255,255,255,0.7)"><div class="pix-step-num" style="background:#9945FF">1</div><span>Abra sua carteira (Phantom, Solflare, etc.)</span></div>
@@ -3572,7 +3577,12 @@
     var emailInput = document.getElementById('pixEmailInput');
     var email = emailInput ? emailInput.value.trim() : '';
 
-    // Se não tem email do pix, tenta pegar do campo MP (se existir no futuro)
+    // Se não tem email do pix, tenta pegar do campo Solana
+    if (!email) {
+      var solEmailInput = document.getElementById('solEmailInput');
+      email = solEmailInput ? solEmailInput.value.trim() : '';
+    }
+
     if (!email) return;
 
     var items = Object.values(cart).map(function(i) {
@@ -3658,7 +3668,6 @@
   async function payWithPhantom() {
     try {
       if (!window.solana || !window.solana.isPhantom) {
-        // Redireciona pra instalar Phantom
         window.open('https://phantom.app/', '_blank');
         return;
       }
@@ -3670,22 +3679,26 @@
       const resp = await window.solana.connect();
       const senderPubkey = resp.publicKey;
 
-      // Importa as libs necessárias do Solana
-      const { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } = await import('https://esm.sh/@solana/web3.js@1.87.6');
-
-      const connection = new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
-      const recipientPubkey = new PublicKey(SOL_WALLET);
-
       const total = getCartTotal();
       const solAmt = solPrice ? (total / solPrice) : 0;
 
       if (solAmt <= 0) {
-        throw new Error('Cotação indisponível. Use o QR Code.');
+        throw new Error('Cotação indisponível. Use o QR Code ou link mobile.');
       }
 
-      const lamports = Math.round(solAmt * LAMPORTS_PER_SOL);
+      const lamports = Math.round(solAmt * 1000000000); // 1 SOL = 1 bilhão de lamports
 
-      // Cria a transação
+      if (phantomBtn) phantomBtn.textContent = '⏳ Confirme na carteira...';
+
+      // Usa o método signAndSendTransaction do Phantom com a transação serializada
+      // O Phantom cuida do RPC internamente
+      const { Connection, PublicKey, Transaction, SystemProgram } = await import('https://esm.sh/@solana/web3.js@1.87.6');
+
+      // Usa o RPC do Phantom via provider
+      const connection = new Connection(window.solana._rpcEndpoint || 'https://api.mainnet-beta.solana.com', 'confirmed');
+
+      const recipientPubkey = new PublicKey(SOL_WALLET);
+
       const transaction = new Transaction().add(
         SystemProgram.transfer({
           fromPubkey: senderPubkey,
@@ -3694,17 +3707,14 @@
         })
       );
 
-      transaction.feePayer = senderPubkey;
       const { blockhash } = await connection.getLatestBlockhash();
       transaction.recentBlockhash = blockhash;
+      transaction.feePayer = senderPubkey;
 
-      if (phantomBtn) phantomBtn.textContent = '⏳ Confirme na carteira...';
-
-      // Envia pra Phantom assinar e enviar
       const signed = await window.solana.signAndSendTransaction(transaction);
 
-      // Aguarda confirmação
       if (phantomBtn) phantomBtn.textContent = '⏳ Aguardando confirmação...';
+
       await connection.confirmTransaction(signed.signature, 'confirmed');
 
       // SUCESSO!
@@ -3732,10 +3742,10 @@
       var phantomBtn2 = document.getElementById('solPhantomBtn');
       if (phantomBtn2) { phantomBtn2.disabled = false; phantomBtn2.textContent = '👻 Pagar com Phantom'; }
 
-      if (error.message && error.message.includes('User rejected')) {
+      if (error.message && (error.message.includes('User rejected') || error.message.includes('cancelled'))) {
         // Usuário cancelou, não faz nada
       } else {
-        alert('Erro: ' + (error.message || 'Falha na transação'));
+        alert('Erro: ' + (error.message || 'Falha na transação. Tente pelo QR Code ou link mobile.'));
       }
     }
   }
@@ -3800,6 +3810,7 @@
   function confirmSol() {
     document.getElementById('solScreen').style.display = 'none';
     document.getElementById('solConfirmingScreen').style.display = 'block';
+    sendDonationEmail();
     setTimeout(() => {
       document.getElementById('solModal').classList.remove('active');
       setTimeout(() => {
