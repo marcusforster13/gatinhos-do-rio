@@ -3561,7 +3561,34 @@
   function mpConfirmDone() {
     const modal = document.getElementById('mpConfirmModal');
     if (modal) modal.remove();
+    sendDonationEmail();
     donate();
+  }
+
+  // ---- ENVIO DE EMAIL PERSONALIZADO ----
+  function sendDonationEmail() {
+    var emailInput = document.getElementById('pixEmailInput');
+    var email = emailInput ? emailInput.value.trim() : '';
+
+    // Se não tem email do pix, tenta pegar do campo MP (se existir no futuro)
+    if (!email) return;
+
+    var items = Object.values(cart).map(function(i) {
+      return { name: i.name, qty: i.qty, price: i.price, emoji: i.emoji };
+    });
+    var total = getCartTotal();
+
+    fetch('/api/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        items: items,
+        total: total,
+        shelter: selectedShelter || 'Abrigo',
+        prize: chosenPrize ? { emoji: chosenPrize.emoji, name: chosenPrize.name, rarity: chosenPrize.rarity } : null
+      })
+    }).catch(function(e) { console.log('Email não enviado:', e); });
   }
 
   // ---- SOLANA ----
@@ -3839,6 +3866,9 @@
     document.getElementById('pixConfirmingText').textContent = '✅ Pagamento confirmado!';
     document.getElementById('pixConfirmingSub').textContent = 'Obrigado pela doação!';
 
+    // Envia email personalizado
+    sendDonationEmail();
+
     setTimeout(() => {
       document.getElementById('pixModal').classList.remove('active');
       setTimeout(() => {
@@ -3882,24 +3912,31 @@
     clearInterval(pixTimerInterval);
     clearInterval(pixCheckInterval);
 
+    // Envia email personalizado
+    sendDonationEmail();
+
     // Verificar uma última vez
     if (pixPaymentId) {
-      fetch(`/api/status?id=${pixPaymentId}`)
-        .then(r => r.json())
-        .then(data => {
+      fetch('/api/status?id=' + pixPaymentId)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
           if (data.paid) {
-            document.getElementById('pixConfirmingText').textContent = '✅ Pagamento confirmado!';
-            document.getElementById('pixConfirmingSub').textContent = 'Obrigado pela doação!';
+            var ct = document.getElementById('pixConfirmingText');
+            if (ct) ct.textContent = '✅ Pagamento confirmado!';
+            var cs = document.getElementById('pixConfirmingSub');
+            if (cs) cs.textContent = 'Obrigado pela doação!';
           }
         })
-        .catch(() => {});
+        .catch(function() {});
     }
 
-    setTimeout(() => {
+    setTimeout(function() {
       document.getElementById('pixModal').classList.remove('active');
-      setTimeout(() => {
-        document.getElementById('pixScreen').style.display = 'none';
-        document.getElementById('pixConfirmingScreen').style.display = 'none';
+      setTimeout(function() {
+        var ps2 = document.getElementById('pixScreen');
+        if (ps2) ps2.style.display = 'none';
+        var pcs = document.getElementById('pixConfirmingScreen');
+        if (pcs) pcs.style.display = 'none';
       }, 400);
       donate();
     }, 2200);
