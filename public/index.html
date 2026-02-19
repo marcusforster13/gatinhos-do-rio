@@ -3906,40 +3906,72 @@
     }, 2500);
   }
 
-  function confirmPix() {
-    document.getElementById('pixScreen').style.display = 'none';
-    document.getElementById('pixConfirmingScreen').style.display = 'block';
+  async function confirmPix() {
+    var confirmBtn = document.querySelector('#pixScreen .confirm-pix-btn');
+    if (confirmBtn) { confirmBtn.disabled = true; confirmBtn.textContent = '⏳ Verificando pagamento...'; }
+
     clearInterval(pixTimerInterval);
     clearInterval(pixCheckInterval);
 
-    // Envia email personalizado
-    sendDonationEmail();
-
-    // Verificar uma última vez
+    // Verificar se o pagamento foi realmente aprovado
     if (pixPaymentId) {
-      fetch('/api/status?id=' + pixPaymentId)
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-          if (data.paid) {
-            var ct = document.getElementById('pixConfirmingText');
-            if (ct) ct.textContent = '✅ Pagamento confirmado!';
-            var cs = document.getElementById('pixConfirmingSub');
-            if (cs) cs.textContent = 'Obrigado pela doação!';
-          }
-        })
-        .catch(function() {});
+      try {
+        var statusRes = await fetch('/api/status?id=' + pixPaymentId);
+        var statusData = await statusRes.json();
+
+        if (statusData.paid) {
+          // APROVADO - segue o fluxo normal
+          document.getElementById('pixScreen').style.display = 'none';
+          document.getElementById('pixConfirmingScreen').style.display = 'block';
+          var ct = document.getElementById('pixConfirmingText');
+          if (ct) ct.textContent = '✅ Pagamento confirmado!';
+          var cs = document.getElementById('pixConfirmingSub');
+          if (cs) cs.textContent = 'Obrigado pela doação!';
+
+          sendDonationEmail();
+
+          setTimeout(function() {
+            document.getElementById('pixModal').classList.remove('active');
+            setTimeout(function() {
+              var ps2 = document.getElementById('pixScreen');
+              if (ps2) ps2.style.display = 'none';
+              var pcs = document.getElementById('pixConfirmingScreen');
+              if (pcs) pcs.style.display = 'none';
+            }, 400);
+            donate();
+          }, 2200);
+          return;
+        }
+      } catch(e) {
+        console.log('Erro ao verificar:', e);
+      }
     }
 
+    // NÃO APROVADO - mostra mensagem de aviso
+    if (confirmBtn) {
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = '✅ Já paguei!';
+    }
+
+    // Mostra alerta de pagamento não identificado
+    var existingAlert = document.getElementById('pixNotPaidAlert');
+    if (existingAlert) existingAlert.remove();
+
+    var alert = document.createElement('div');
+    alert.id = 'pixNotPaidAlert';
+    alert.style.cssText = 'background:#fff3e0;border:2px solid #e8621a;border-radius:12px;padding:14px 18px;margin:12px 0;text-align:center;animation:slideUpFade 0.3s ease;';
+    alert.innerHTML = '<div style="font-size:1.5rem;margin-bottom:6px;">⏳</div>' +
+      '<div style="font-family:\'Fredoka One\',cursive;color:#e8621a;font-size:0.95rem;margin-bottom:4px;">Pagamento não identificado ainda</div>' +
+      '<div style="color:#888;font-size:0.8rem;">Se já pagou, aguarde alguns instantes e tente novamente. O PIX pode levar até 1 minuto para ser processado.</div>';
+
+    var confirmBtnParent = confirmBtn ? confirmBtn.parentNode : document.getElementById('pixScreen');
+    if (confirmBtnParent) confirmBtnParent.insertBefore(alert, confirmBtn);
+
+    // Remove o alerta depois de 8 segundos
     setTimeout(function() {
-      document.getElementById('pixModal').classList.remove('active');
-      setTimeout(function() {
-        var ps2 = document.getElementById('pixScreen');
-        if (ps2) ps2.style.display = 'none';
-        var pcs = document.getElementById('pixConfirmingScreen');
-        if (pcs) pcs.style.display = 'none';
-      }, 400);
-      donate();
-    }, 2200);
+      var a = document.getElementById('pixNotPaidAlert');
+      if (a) a.remove();
+    }, 8000);
   }
 
   function closePixModal() {
