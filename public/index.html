@@ -126,6 +126,7 @@
     background: rgba(0,0,0,0.55);
     backdrop-filter: blur(4px);
     transition: opacity 0.3s;
+    z-index: 10;
   }
 
   .game-overlay.hidden { opacity: 0; pointer-events: none; }
@@ -158,6 +159,10 @@
     cursor: pointer;
     box-shadow: 0 4px 0 #093d22, 0 0 20px rgba(26,122,74,0.4);
     transition: all 0.2s;
+    z-index: 11;
+    position: relative;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .game-start-btn:hover { transform: translateY(-2px); }
@@ -4870,10 +4875,12 @@
     }
   });
 
-  document.getElementById('gameCanvasWrap')?.addEventListener('click', () => {
-    if (gameRunning) jump();
+  document.getElementById('gameCanvasWrap')?.addEventListener('click', (e) => {
+    if (gameRunning && !e.target.closest('button')) jump();
   });
-  document.getElementById('gameCanvasWrap')?.addEventListener('touchstart', e => {
+  document.getElementById('gameCanvasWrap')?.addEventListener('touchstart', (e) => {
+    // Não bloqueia toque em botões (overlay start/restart)
+    if (e.target.closest('button')) return;
     e.preventDefault();
     if (gameRunning) jump();
   }, { passive: false });
