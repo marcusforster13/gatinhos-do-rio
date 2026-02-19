@@ -3695,7 +3695,7 @@
       const { Connection, PublicKey, Transaction, SystemProgram } = await import('https://esm.sh/@solana/web3.js@1.87.6');
 
       // Usa o RPC do Phantom via provider
-      const connection = new Connection(window.solana._rpcEndpoint || 'https://api.mainnet-beta.solana.com', 'confirmed');
+      const connection = new Connection('https://rpc.ankr.com/solana', 'confirmed');
 
       const recipientPubkey = new PublicKey(SOL_WALLET);
 
@@ -3840,7 +3840,7 @@
 
     try {
       // Verifica a transação na API pública da Solana
-      var response = await fetch('https://api.mainnet-beta.solana.com', {
+      var response = await fetch('https://rpc.ankr.com/solana', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
