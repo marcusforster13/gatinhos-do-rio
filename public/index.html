@@ -3546,32 +3546,27 @@
     modal.innerHTML = `
       <div style="background:#1a1a2e;border-radius:24px;padding:32px;max-width:420px;width:90%;text-align:center;border:2px solid rgba(0,158,227,0.3);">
         <div style="font-size:3rem;margin-bottom:12px;">💙</div>
-        <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#009ee3;margin-bottom:8px;">Pagamento aberto!</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#009ee3;margin-bottom:8px;">Checkout aberto!</div>
         <div style="color:rgba(255,255,255,0.7);font-size:0.9rem;line-height:1.6;margin-bottom:8px;">
           Complete o pagamento de <strong style="color:#009ee3;">R$ ${total.toFixed(2).replace('.',',')}</strong> na aba do Mercado Pago.
         </div>
-        <div style="color:rgba(255,255,255,0.5);font-size:0.78rem;margin-bottom:20px;">
-          📧 Após o pagamento, você e nós receberemos um email de confirmação automaticamente pelo Mercado Pago!
+        <div style="background:rgba(0,158,227,0.1);border-radius:12px;padding:14px;margin:16px 0;">
+          <div style="color:#009ee3;font-size:0.85rem;line-height:1.5;">
+            💳 Pague com <strong>PIX, Cartão ou Boleto</strong><br>
+            🔄 Após o pagamento, você será <strong>redirecionado automaticamente</strong> de volta<br>
+            📧 Ambos receberemos email de confirmação
+          </div>
         </div>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-          <button onclick="mpConfirmDone()" style="background:#009ee3;color:white;border:none;padding:12px 28px;font-family:'Fredoka One',cursive;font-size:1rem;border-radius:30px;cursor:pointer;box-shadow:0 4px 0 #005a8c;">
-            ✅ Já paguei!
-          </button>
-          <button onclick="document.getElementById('mpConfirmModal').remove()" style="background:none;border:2px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);padding:12px 28px;font-family:'Fredoka One',cursive;font-size:1rem;border-radius:30px;cursor:pointer;">
-            Cancelar
-          </button>
+        <div style="color:rgba(255,255,255,0.35);font-size:0.72rem;margin-bottom:16px;">
+          ⚠️ Não feche esta página. Após pagar, o Mercado Pago te trará de volta automaticamente.
         </div>
+        <button onclick="document.getElementById('mpConfirmModal').remove()" style="background:none;border:2px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);padding:12px 28px;font-family:'Fredoka One',cursive;font-size:1rem;border-radius:30px;cursor:pointer;">
+          Fechar
+        </button>
       </div>
     `;
     document.body.appendChild(modal);
     modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
-  }
-
-  function mpConfirmDone() {
-    const modal = document.getElementById('mpConfirmModal');
-    if (modal) modal.remove();
-    sendDonationEmail();
-    donate();
   }
 
   // ---- ENVIO DE EMAIL PERSONALIZADO ----
