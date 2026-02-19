@@ -3485,56 +3485,58 @@
   const MERCADO_PAGO_LINK = 'https://link.mercadopago.com.br/gatinhosdorio';
   // Exemplo: const MERCADO_PAGO_LINK = 'https://mpago.la/2X3abc';
 
-  function openMercadoPago() {
+  async function openMercadoPago() {
     hidePaymentSelector();
     const total = getCartTotal();
+    const items = Object.values(cart).map(function(i) {
+      return { name: i.name, qty: i.qty, price: i.price };
+    });
 
-    if (MERCADO_PAGO_LINK === 'SEU_LINK_AQUI') {
-      // Alerta se ainda não configurou o link
-      const modal = document.createElement('div');
-      modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;';
-      modal.innerHTML = `
-        <div style="background:#1a1a2e;border-radius:24px;padding:32px;max-width:420px;width:90%;text-align:center;border:2px solid rgba(0,158,227,0.3);">
-          <div style="font-size:3rem;margin-bottom:12px;">⚙️</div>
-          <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;color:#009ee3;margin-bottom:8px;">Configurar Mercado Pago</div>
-          <div style="color:rgba(255,255,255,0.7);font-size:0.9rem;line-height:1.6;margin-bottom:20px;">
-            Para ativar pagamentos reais, você precisa:<br><br>
-            <strong style="color:#fff;">1.</strong> Acesse <strong style="color:#009ee3;">mercadopago.com.br</strong><br>
-            <strong style="color:#fff;">2.</strong> Vá em <strong style="color:#009ee3;">Seu negócio → Cobranças</strong><br>
-            <strong style="color:#fff;">3.</strong> Crie um <strong style="color:#009ee3;">Link de pagamento</strong><br>
-            <strong style="color:#fff;">4.</strong> Cole o link no código onde diz:<br>
-            <code style="background:rgba(255,255,255,0.1);padding:4px 8px;border-radius:6px;font-size:0.8rem;color:#009ee3;display:inline-block;margin-top:4px;">MERCADO_PAGO_LINK = 'seu_link'</code>
-          </div>
-          <div style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-bottom:16px;">
-            💡 O Mercado Pago já envia emails de confirmação automáticos para você e para quem paga!
-          </div>
-          <button onclick="this.closest('div[style]').parentElement.remove()" style="background:#009ee3;color:white;border:none;padding:12px 32px;font-family:'Fredoka One',cursive;font-size:1rem;border-radius:30px;cursor:pointer;box-shadow:0 4px 0 #005a8c;">
-            Entendi! 👍
-          </button>
-        </div>
-      `;
-      document.body.appendChild(modal);
-      modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
-      return;
-    }
+    // Mostra loading
+    var loadingModal = document.createElement('div');
+    loadingModal.id = 'mpLoadingModal';
+    loadingModal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;';
+    loadingModal.innerHTML = '<div style="text-align:center;"><div style="font-size:3rem;margin-bottom:12px;animation:spin 1s linear infinite;">⏳</div><div style="font-family:\'Fredoka One\',cursive;color:#009ee3;font-size:1.1rem;">Gerando checkout...</div></div>';
+    document.body.appendChild(loadingModal);
 
-    // Salva dados da doação no sessionStorage antes de redirecionar
     try {
-      sessionStorage.setItem('gatinhos_donation', JSON.stringify({
-        items: Object.values(cart).map(i => ({ name: i.name, qty: i.qty, price: i.price })),
-        total: total,
-        shelter: selectedShelter,
-        date: new Date().toISOString()
-      }));
-    } catch(e) {}
+      var response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: items,
+          shelter: selectedShelter,
+          email: ''
+        })
+      });
 
-    // Redireciona para o Mercado Pago com valor preenchido
-    window.open(MERCADO_PAGO_LINK + '?amount=' + total.toFixed(2), '_blank');
+      var data = await response.json();
+      loadingModal.remove();
 
-    // Mostra modal de confirmação após redirecionar
-    setTimeout(() => {
-      showMPConfirmModal(total);
-    }, 500);
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Erro ao gerar checkout');
+      }
+
+      // Salva dados da doação antes de redirecionar
+      try {
+        sessionStorage.setItem('gatinhos_donation', JSON.stringify({
+          items: items,
+          total: total,
+          shelter: selectedShelter,
+          date: new Date().toISOString()
+        }));
+      } catch(e) {}
+
+      // Abre o Checkout Pro do Mercado Pago
+      window.open(data.checkout_url, '_blank');
+
+      // Mostra modal de confirmação
+      setTimeout(function() { showMPConfirmModal(total); }, 500);
+
+    } catch (error) {
+      loadingModal.remove();
+      alert('Erro: ' + (error.message || 'Falha ao gerar checkout. Tente o PIX.'));
+    }
   }
 
   function showMPConfirmModal(total) {
@@ -4867,6 +4869,28 @@
   function scrollToCart() {
     document.getElementById('cartSection').scrollIntoView({ behavior: 'smooth' });
   }
+
+  // Verifica se voltou do Mercado Pago com pagamento aprovado
+  (function checkMPReturn() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('payment') === 'success') {
+      // Limpa URL
+      window.history.replaceState({}, '', window.location.pathname);
+      // Recupera dados da doação
+      try {
+        var donationData = JSON.parse(sessionStorage.getItem('gatinhos_donation'));
+        if (donationData) {
+          sessionStorage.removeItem('gatinhos_donation');
+          // Envia email
+          sendDonationEmail();
+          // Mostra mensagem de sucesso e dispara loot box
+          setTimeout(function() {
+            donate();
+          }, 500);
+        }
+      } catch(e) {}
+    }
+  })();
 
 </script>
 
