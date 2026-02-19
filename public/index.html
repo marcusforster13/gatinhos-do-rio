@@ -2764,7 +2764,7 @@
 
       <div class="sol-address-section">
         <div class="sol-address-label">Endereço da carteira Solana</div>
-        <div class="sol-address-value" id="solAddressVal">GatRioXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
+        <div class="sol-address-value" id="solAddressVal">3D94WEZMX18EMEppaaMXETRGUhBHxAmwaANfghc6SAZZ</div>
         <button class="sol-copy-btn" id="solCopyBtn" onclick="copySolAddress()">📋 Copiar endereço</button>
       </div>
 
@@ -2780,7 +2780,9 @@
         <div class="pix-step-item" style="color:rgba(255,255,255,0.7)"><div class="pix-step-num" style="background:#9945FF">4</div><span>Clique em <strong>"Confirmar Envio"</strong> abaixo</span></div>
       </div>
 
-      <button class="confirm-sol-btn" onclick="confirmSol()">🚀 Confirmar Envio</button>
+      <button class="confirm-sol-btn" id="solPhantomBtn" onclick="payWithPhantom()" style="background:linear-gradient(135deg,#ab9ff2,#9945FF);margin-bottom:8px;">👻 Pagar com Phantom</button>
+      <a id="solMobileLink" href="#" target="_blank" class="confirm-sol-btn" style="display:block;text-align:center;text-decoration:none;color:white;background:linear-gradient(135deg,#14F195,#0cbd7a);margin-bottom:8px;font-family:'Fredoka One',cursive;font-size:1rem;padding:14px;border-radius:30px;">📱 Abrir na carteira (mobile)</a>
+      <button class="confirm-sol-btn" onclick="confirmSol()">✅ Já enviei!</button>
       <button class="back-pix-btn" style="border-color:rgba(255,255,255,0.15); color:rgba(255,255,255,0.4);" onclick="closeSolModal()">← Voltar</button>
     </div>
 
@@ -3604,7 +3606,7 @@
     }
   }
 
-  const SOL_WALLET = 'GatRio7mHtQzWzHnFJq4mJj9PtNzBxP8rKfLeDm3VsAP';
+  const SOL_WALLET = '3D94WEZMX18EMEppaaMXETRGUhBHxAmwaANfghc6SAZZ';
 
   function openSolModal() {
     hidePaymentSelector();
@@ -3625,6 +3627,12 @@
     document.getElementById('solConfirmingScreen').style.display = 'none';
     document.getElementById('solModal').classList.add('active');
 
+    // Esconde/mostra botão Phantom dependendo se tem carteira
+    var phantomBtn = document.getElementById('solPhantomBtn');
+    if (phantomBtn) {
+      phantomBtn.style.display = (window.solana && window.solana.isPhantom) ? 'block' : 'none';
+    }
+
     fetchSolPrice().then(() => {
       if (solPrice) {
         const solAmt = (total / solPrice).toFixed(4);
@@ -3632,8 +3640,12 @@
         document.getElementById('solSpinner').style.display = 'none';
         document.getElementById('solRateNote').textContent = `1 SOL ≈ R$ ${solPrice.toFixed(2).replace('.',',')} • CoinGecko`;
         document.getElementById('solStepAmount').textContent = `${solAmt} SOL`;
-        // Redraw QR with proper amount
-        drawSolQR(`solana:${SOL_WALLET}?amount=${solAmt}`);
+        // Redraw QR with proper solana: URI
+        var solUri = `solana:${SOL_WALLET}?amount=${solAmt}`;
+        drawSolQR(solUri);
+        // Atualiza link mobile
+        var mobileLink = document.getElementById('solMobileLink');
+        if (mobileLink) mobileLink.href = solUri;
       } else {
         document.getElementById('solValue').textContent = '?';
         document.getElementById('solSpinner').style.display = 'none';
@@ -3641,6 +3653,91 @@
         document.getElementById('solStepAmount').textContent = '(confira valor na sua carteira)';
       }
     });
+  }
+
+  async function payWithPhantom() {
+    try {
+      if (!window.solana || !window.solana.isPhantom) {
+        // Redireciona pra instalar Phantom
+        window.open('https://phantom.app/', '_blank');
+        return;
+      }
+
+      var phantomBtn = document.getElementById('solPhantomBtn');
+      if (phantomBtn) { phantomBtn.disabled = true; phantomBtn.textContent = '⏳ Conectando carteira...'; }
+
+      // Conecta à carteira
+      const resp = await window.solana.connect();
+      const senderPubkey = resp.publicKey;
+
+      // Importa as libs necessárias do Solana
+      const { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } = await import('https://esm.sh/@solana/web3.js@1.87.6');
+
+      const connection = new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
+      const recipientPubkey = new PublicKey(SOL_WALLET);
+
+      const total = getCartTotal();
+      const solAmt = solPrice ? (total / solPrice) : 0;
+
+      if (solAmt <= 0) {
+        throw new Error('Cotação indisponível. Use o QR Code.');
+      }
+
+      const lamports = Math.round(solAmt * LAMPORTS_PER_SOL);
+
+      // Cria a transação
+      const transaction = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: senderPubkey,
+          toPubkey: recipientPubkey,
+          lamports: lamports
+        })
+      );
+
+      transaction.feePayer = senderPubkey;
+      const { blockhash } = await connection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+
+      if (phantomBtn) phantomBtn.textContent = '⏳ Confirme na carteira...';
+
+      // Envia pra Phantom assinar e enviar
+      const signed = await window.solana.signAndSendTransaction(transaction);
+
+      // Aguarda confirmação
+      if (phantomBtn) phantomBtn.textContent = '⏳ Aguardando confirmação...';
+      await connection.confirmTransaction(signed.signature, 'confirmed');
+
+      // SUCESSO!
+      document.getElementById('solScreen').style.display = 'none';
+      document.getElementById('solConfirmingScreen').style.display = 'block';
+
+      var solConfText = document.querySelector('#solConfirmingScreen .pix-confirming-text');
+      if (solConfText) { solConfText.textContent = '✅ Transação confirmada!'; solConfText.style.color = '#00FFA3'; }
+      var solConfSub = document.querySelector('#solConfirmingScreen .pix-confirming-sub');
+      if (solConfSub) solConfSub.textContent = 'TX: ' + signed.signature.slice(0, 12) + '...';
+
+      sendDonationEmail();
+
+      setTimeout(function() {
+        document.getElementById('solModal').classList.remove('active');
+        setTimeout(function() {
+          document.getElementById('solScreen').style.display = 'block';
+          document.getElementById('solConfirmingScreen').style.display = 'none';
+        }, 400);
+        donate();
+      }, 2400);
+
+    } catch (error) {
+      console.error('Erro Solana:', error);
+      var phantomBtn2 = document.getElementById('solPhantomBtn');
+      if (phantomBtn2) { phantomBtn2.disabled = false; phantomBtn2.textContent = '👻 Pagar com Phantom'; }
+
+      if (error.message && error.message.includes('User rejected')) {
+        // Usuário cancelou, não faz nada
+      } else {
+        alert('Erro: ' + (error.message || 'Falha na transação'));
+      }
+    }
   }
 
   function drawSolQR(text) {
