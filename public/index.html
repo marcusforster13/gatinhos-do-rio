@@ -2184,6 +2184,27 @@
     .step-label { font-size: 0.6rem; }
     .steps-bar { gap: 0; }
     .step { padding: 0 12px; }
+
+    /* GAME MOBILE */
+    .game-wrapper { padding: 8px; }
+    .game-header { flex-direction: column; gap: 6px; padding: 8px; }
+    .game-title { font-size: 0.9rem; }
+    .game-stats { gap: 8px; }
+    .game-stat { font-size: 0.8rem; padding: 4px 8px; }
+    .game-canvas-wrap { border-radius: 12px; touch-action: none; }
+    .game-overlay-title { font-size: 1.1rem; }
+    .game-overlay-sub { font-size: 0.75rem; padding: 0 10px; }
+    .game-start-btn { font-size: 0.9rem; padding: 10px 24px; }
+    .game-instructions { gap: 6px; }
+    .game-key { font-size: 0.7rem; }
+    .key-badge { font-size: 0.65rem; padding: 2px 6px; }
+    .game-score-board { grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 8px; }
+    .score-item { padding: 8px; }
+    .score-item-label { font-size: 0.65rem; }
+    .score-item-value { font-size: 1.1rem; }
+
+    /* Esconde instruções de teclado no mobile, mostra só TAP */
+    .game-key:nth-child(1), .game-key:nth-child(2) { display: none; }
   }
 </style>
 </head>
