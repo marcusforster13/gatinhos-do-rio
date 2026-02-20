@@ -739,6 +739,32 @@
     text-shadow: 1px 2px 4px rgba(0,0,0,0.5);
   }
 
+  /* Centro de Cuidados Solidários — visual hospital */
+  .store-container.clinic-store {
+    background: linear-gradient(180deg, #2a7a5a 0%, #1a5c3e 100%);
+  }
+
+  .store-container.clinic-store::before {
+    content: '💉 Centro de Cuidados Solidários';
+  }
+
+  .clinic-bg {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='%23f0f7f4'/%3E%3Cpath d='M18 8h4v24h-4zM8 18h24v4H8z' fill='%23dceee5' opacity='0.5'/%3E%3C/svg%3E") !important;
+  }
+
+  .clinic-store .shelf {
+    background: linear-gradient(180deg, #5aae8a 0%, #3d8c6a 100%);
+    box-shadow: 0 6px 0 #1a5c3e, 0 8px 0 rgba(0,0,0,0.2);
+  }
+
+  .clinic-store .shelf::before {
+    background: linear-gradient(180deg, #4a9e7a 0%, #3d8c6a 100%);
+  }
+
+  .clinic-store .shelf-label {
+    color: #e8f5e9;
+  }
+
   .store-bg {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='%23f5f0e8'/%3E%3Crect x='0' y='0' width='30' height='30' fill='%23ece5d5'/%3E%3Crect x='30' y='30' width='30' height='30' fill='%23ece5d5'/%3E%3C/svg%3E");
     border-radius: 12px;
@@ -2753,11 +2779,11 @@
   </div>
 
   <!-- SEÇÃO FUNDO SOLIDÁRIO -->
-  <div class="section-title" style="margin-top:32px;">💚 Fundo Solidário</div>
+  <div class="section-title" style="margin-top:32px;">💚 Centro de Cuidados Solidários</div>
   <div class="section-subtitle">Cotas e serviços administrados diretamente pela equipe Gatinhos do Rio — não vão ao abrigo, vão pro fundo de cuidados veterinários</div>
 
-  <div class="store-container">
-    <div class="store-bg">
+  <div class="store-container clinic-store">
+    <div class="store-bg clinic-bg">
 
       <!-- FUNDO 1: Castração Solidária -->
       <div class="shelf">
