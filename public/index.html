@@ -63,6 +63,234 @@
     display: none;
   }
 
+  #transpSection {
+    display: none;
+  }
+
+  .transp-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 16px;
+  }
+
+  .transp-hero {
+    background: linear-gradient(135deg, #1a7a4a 0%, #0f5c35 50%, #1a7a4a 100%);
+    border-radius: 24px;
+    padding: 36px 24px;
+    text-align: center;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .transp-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(245,197,24,0.08) 0%, transparent 50%);
+  }
+
+  .transp-hero h2 {
+    font-family: 'Fredoka One', cursive;
+    color: #f5c518;
+    font-size: 2rem;
+    margin: 8px 0;
+    position: relative;
+  }
+
+  .transp-hero p {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.95rem;
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .transp-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    border: 2px solid rgba(26,122,74,0.08);
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .transp-card-header {
+    padding: 18px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.2s;
+    user-select: none;
+  }
+
+  .transp-card-header:hover { background: rgba(26,122,74,0.03); }
+
+  .transp-card-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+  }
+
+  .transp-card-title {
+    font-family: 'Fredoka One', cursive;
+    color: var(--marrom);
+    font-size: 1.1rem;
+    flex-grow: 1;
+  }
+
+  .transp-card-arrow {
+    font-size: 1.2rem;
+    color: var(--verde);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .transp-card.open .transp-card-arrow { transform: rotate(180deg); }
+
+  .transp-card-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .transp-card.open .transp-card-body {
+    max-height: 800px;
+  }
+
+  .transp-card-content {
+    padding: 0 24px 24px;
+    color: var(--marrom);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .transp-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .transp-stat {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px 12px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    border: 2px solid rgba(26,122,74,0.1);
+  }
+
+  .transp-stat-icon { font-size: 1.8rem; margin-bottom: 4px; }
+  .transp-stat-value {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6rem;
+    color: var(--verde);
+  }
+  .transp-stat-label {
+    font-size: 0.72rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  .transp-list {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+  }
+
+  .transp-list li {
+    padding: 10px 14px;
+    background: rgba(26,122,74,0.04);
+    border-radius: 10px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+  }
+
+  .transp-list li .tl-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .transp-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .transp-flow-item {
+    background: white;
+    border: 2px solid rgba(26,122,74,0.15);
+    border-radius: 14px;
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--marrom);
+    min-width: 100px;
+  }
+
+  .transp-flow-item strong { display: block; font-size: 1.2rem; margin-bottom: 2px; }
+
+  .transp-flow-arrow {
+    font-size: 1.3rem;
+    color: var(--verde);
+  }
+
+  .transp-community {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .transp-comm-item {
+    text-align: center;
+    padding: 14px 8px;
+    background: rgba(26,122,74,0.05);
+    border-radius: 14px;
+    transition: transform 0.2s;
+  }
+
+  .transp-comm-item:hover { transform: translateY(-3px); }
+  .transp-comm-item .tci-icon { font-size: 1.6rem; }
+  .transp-comm-item .tci-label { font-size: 0.72rem; color: var(--marrom); margin-top: 4px; }
+
+  .transp-progress {
+    background: rgba(26,122,74,0.1);
+    border-radius: 10px;
+    height: 14px;
+    overflow: hidden;
+    margin: 8px 0;
+  }
+
+  .transp-progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--verde), #2e9e5e);
+    width: 0%;
+    transition: width 1.5s ease;
+  }
+
+  @media (max-width: 640px) {
+    .transp-stats { grid-template-columns: repeat(2, 1fr); }
+    .transp-community { grid-template-columns: repeat(3, 1fr); }
+    .transp-flow { flex-direction: column; }
+    .transp-flow-arrow { transform: rotate(90deg); }
+  }
+
   .clinic-wrapper {
     max-width: 900px;
     margin: 0 auto;
@@ -2479,6 +2707,7 @@
     <button class="tab-btn active" id="tabShop" onclick="switchTab('shop')">🛒 Loja</button>
     <button class="tab-btn" id="tabGame" onclick="switchTab('game')">🎮 Jogo</button>
     <button class="tab-btn" id="tabClinic" onclick="switchTab('clinic')">🏥 Clínicas</button>
+    <button class="tab-btn" id="tabTransp" onclick="switchTab('transp')">💚 Transparência</button>
   </div>
 </header>
 
@@ -3186,6 +3415,194 @@
       <button class="clinic-submit-btn" onclick="submitClinicForm()">🏥 Solicitar Apoio</button>
 
       <div id="clinicFormMsg" style="display:none;margin-top:14px;padding:14px 18px;border-radius:12px;text-align:center;font-family:'Fredoka One',cursive;"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TRANSPARENCY SECTION -->
+<div id="transpSection">
+  <div class="transp-wrapper">
+
+    <div class="transp-hero">
+      <div style="font-size:3.5rem;position:relative;">💚</div>
+      <h2>Transparência</h2>
+      <p>Cada real doado tem destino certo. Aqui você acompanha como seu impacto chega aos gatinhos do Rio.</p>
+    </div>
+
+    <!-- CONTADORES ANIMADOS -->
+    <div class="transp-stats">
+      <div class="transp-stat">
+        <div class="transp-stat-icon">🐱</div>
+        <div class="transp-stat-value" id="tCounter1">0</div>
+        <div class="transp-stat-label">Gatos ajudados</div>
+      </div>
+      <div class="transp-stat">
+        <div class="transp-stat-icon">🏠</div>
+        <div class="transp-stat-value" id="tCounter2">0</div>
+        <div class="transp-stat-label">Abrigos parceiros</div>
+      </div>
+      <div class="transp-stat">
+        <div class="transp-stat-icon">💰</div>
+        <div class="transp-stat-value" id="tCounter3">R$ 0</div>
+        <div class="transp-stat-label">Arrecadado</div>
+      </div>
+      <div class="transp-stat">
+        <div class="transp-stat-icon">✂️</div>
+        <div class="transp-stat-value" id="tCounter4">0</div>
+        <div class="transp-stat-label">Castrações realizadas</div>
+      </div>
+    </div>
+
+    <!-- CARDS ACCORDION -->
+    <div class="transp-card open" onclick="toggleTranspCard(this)">
+      <div class="transp-card-header">
+        <div class="transp-card-icon">🐾</div>
+        <div class="transp-card-title">O que é o Gatinhos do Rio?</div>
+        <div class="transp-card-arrow">▼</div>
+      </div>
+      <div class="transp-card-body">
+        <div class="transp-card-content">
+          Projeto independente criado para conectar <strong>doadores</strong>, <strong>abrigos</strong> e <strong>clínicas veterinárias</strong> do Rio de Janeiro.
+          <br><br>
+          Nosso objetivo é transformar doações em impacto real, com organização, tecnologia e responsabilidade.
+        </div>
+      </div>
+    </div>
+
+    <div class="transp-card" onclick="toggleTranspCard(this)">
+      <div class="transp-card-header">
+        <div class="transp-card-icon">🎯</div>
+        <div class="transp-card-title">Nossa Missão</div>
+        <div class="transp-card-arrow">▼</div>
+      </div>
+      <div class="transp-card-body">
+        <div class="transp-card-content">
+          Levar <strong>alimento, saúde e suporte emergencial</strong> aos gatos do Rio, criando uma rede solidária sustentável.
+          <div class="transp-progress" style="margin-top:16px;">
+            <div class="transp-progress-bar" id="tMissionBar" style="width:0%"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#888;">
+            <span>Meta mensal do fundo</span>
+            <span id="tMissionLabel">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="transp-card" onclick="toggleTranspCard(this)">
+      <div class="transp-card-header">
+        <div class="transp-card-icon">💰</div>
+        <div class="transp-card-title">Como funcionam as doações?</div>
+        <div class="transp-card-arrow">▼</div>
+      </div>
+      <div class="transp-card-body">
+        <div class="transp-card-content">
+          <div class="transp-flow">
+            <div class="transp-flow-item"><strong>🛒</strong>Loja Solidária</div>
+            <div class="transp-flow-arrow">→</div>
+            <div class="transp-flow-item"><strong>📦</strong>Compra dos itens</div>
+            <div class="transp-flow-arrow">→</div>
+            <div class="transp-flow-item"><strong>🏠</strong>Entrega ao abrigo</div>
+          </div>
+          <div class="transp-flow" style="margin-top:8px;">
+            <div class="transp-flow-item"><strong>💉</strong>Fundo Solidário</div>
+            <div class="transp-flow-arrow">→</div>
+            <div class="transp-flow-item"><strong>🏥</strong>Clínica solicita</div>
+            <div class="transp-flow-arrow">→</div>
+            <div class="transp-flow-item"><strong>✅</strong>Pagamento à clínica</div>
+          </div>
+          <ul class="transp-list" style="margin-top:16px;">
+            <li><span class="tl-icon">📦</span> Itens da Loja Solidária → comprados e entregues diretamente aos abrigos</li>
+            <li><span class="tl-icon">💉</span> Itens do Fundo Solidário → pagos diretamente às clínicas veterinárias</li>
+            <li><span class="tl-icon">🚫</span> Nenhum valor é entregue em dinheiro físico aos abrigos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="transp-card" onclick="toggleTranspCard(this)">
+      <div class="transp-card-header">
+        <div class="transp-card-icon">🚨</div>
+        <div class="transp-card-title">Sobre o Fundo Solidário</div>
+        <div class="transp-card-arrow">▼</div>
+      </div>
+      <div class="transp-card-body">
+        <div class="transp-card-content">
+          O Fundo Solidário é destinado exclusivamente a cuidados veterinários:
+          <ul class="transp-list">
+            <li><span class="tl-icon">🚨</span> Cirurgias emergenciais</li>
+            <li><span class="tl-icon">💊</span> Tratamentos veterinários</li>
+            <li><span class="tl-icon">✂️</span> Castrações solidárias</li>
+            <li><span class="tl-icon">💉</span> Vacinação preventiva</li>
+            <li><span class="tl-icon">🔬</span> Exames essenciais</li>
+          </ul>
+          <div style="background:#e8f5e9;border-radius:12px;padding:14px;margin-top:12px;font-size:0.85rem;">
+            ✅ Clínicas e veterinários parceiros enviam solicitação. Após análise, o pagamento é feito <strong>diretamente à clínica</strong> mediante CNPJ e nota fiscal.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="transp-card" onclick="toggleTranspCard(this)">
+      <div class="transp-card-header">
+        <div class="transp-card-icon">📊</div>
+        <div class="transp-card-title">Prestação de Contas</div>
+        <div class="transp-card-arrow">▼</div>
+      </div>
+      <div class="transp-card-body">
+        <div class="transp-card-content">
+          Nos comprometemos com total transparência:
+          <ul class="transp-list">
+            <li><span class="tl-icon">📄</span> Publicar relatórios periódicos</li>
+            <li><span class="tl-icon">🎯</span> Mostrar metas do fundo</li>
+            <li><span class="tl-icon">💰</span> Informar valores arrecadados</li>
+            <li><span class="tl-icon">💳</span> Informar valores utilizados</li>
+            <li><span class="tl-icon">📈</span> Divulgar impacto gerado</li>
+          </ul>
+          <div style="background:#fff8e1;border:2px solid #f5c518;border-radius:12px;padding:14px;margin-top:12px;font-size:0.82rem;text-align:center;">
+            📊 Dashboard de prestação de contas em breve — com dados em tempo real!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="transp-card" onclick="toggleTranspCard(this)">
+      <div class="transp-card-header">
+        <div class="transp-card-icon">🤝</div>
+        <div class="transp-card-title">Crescimento da Comunidade</div>
+        <div class="transp-card-arrow">▼</div>
+      </div>
+      <div class="transp-card-body">
+        <div class="transp-card-content">
+          O Gatinhos do Rio visa unir todos que se importam com os felinos cariocas:
+          <div class="transp-community">
+            <div class="transp-comm-item">
+              <div class="tci-icon">❤️</div>
+              <div class="tci-label">Doadores</div>
+            </div>
+            <div class="transp-comm-item">
+              <div class="tci-icon">🛡️</div>
+              <div class="tci-label">Protetores</div>
+            </div>
+            <div class="transp-comm-item">
+              <div class="tci-icon">🏥</div>
+              <div class="tci-label">Clínicas</div>
+            </div>
+            <div class="transp-comm-item">
+              <div class="tci-icon">🏠</div>
+              <div class="tci-label">Abrigos</div>
+            </div>
+            <div class="transp-comm-item">
+              <div class="tci-icon">🙋</div>
+              <div class="tci-label">Voluntários</div>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:12px;font-size:0.95rem;color:var(--verde);font-family:'Fredoka One',cursive;">
+            🌟 Nosso objetivo: a maior rede felina solidária do Rio de Janeiro
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -4914,11 +5331,14 @@
     document.getElementById('tabShop').classList.toggle('active', tab === 'shop');
     document.getElementById('tabGame').classList.toggle('active', tab === 'game');
     document.getElementById('tabClinic').classList.toggle('active', tab === 'clinic');
+    document.getElementById('tabTransp').classList.toggle('active', tab === 'transp');
     document.getElementById('shopContent').style.display = tab === 'shop' ? 'block' : 'none';
     document.getElementById('gameSection').style.display = tab === 'game' ? 'block' : 'none';
     document.getElementById('clinicSection').style.display = tab === 'clinic' ? 'block' : 'none';
+    document.getElementById('transpSection').style.display = tab === 'transp' ? 'block' : 'none';
     if (tab === 'game') initGameClouds();
     if (tab === 'shop' && gameRunning) pauseGame();
+    if (tab === 'transp') animateCounters();
   }
 
   function initGameClouds() {
@@ -5449,7 +5869,58 @@
     document.getElementById('cartSection').scrollIntoView({ behavior: 'smooth' });
   }
 
-  // ---- CLINIC FUNCTIONS ----
+  // ---- TRANSPARENCY FUNCTIONS ----
+  function toggleTranspCard(card) {
+    // Se clicou num link ou botão dentro, ignora
+    card.classList.toggle('open');
+  }
+
+  var countersAnimated = false;
+  function animateCounters() {
+    if (countersAnimated) return;
+    countersAnimated = true;
+
+    // Anima os contadores (depois você coloca valores reais aqui)
+    animateCounter('tCounter1', 0, 47, 1500, '');
+    animateCounter('tCounter2', 0, 6, 1200, '');
+    animateCounter('tCounter4', 0, 12, 1400, '');
+
+    // Contador de dinheiro
+    var el3 = document.getElementById('tCounter3');
+    var start = 0, end = 2450, duration = 1800;
+    var startTime = null;
+    function step3(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.round(start + (end - start) * eased);
+      el3.textContent = 'R$ ' + current.toLocaleString('pt-BR');
+      if (progress < 1) requestAnimationFrame(step3);
+    }
+    requestAnimationFrame(step3);
+
+    // Barra de progresso da missão
+    setTimeout(function() {
+      var bar = document.getElementById('tMissionBar');
+      var label = document.getElementById('tMissionLabel');
+      if (bar) bar.style.width = '35%';
+      if (label) label.textContent = '35%';
+    }, 500);
+  }
+
+  function animateCounter(id, start, end, duration, suffix) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      el.textContent = Math.round(start + (end - start) * eased) + (suffix || '');
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
   var selectedUrgency = '';
 
   function selectUrgency(el) {
