@@ -59,6 +59,208 @@
     display: none;
   }
 
+  #clinicSection {
+    display: none;
+  }
+
+  .clinic-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 16px;
+  }
+
+  .clinic-hero {
+    background: linear-gradient(135deg, #1a7a4a, #0f5c35);
+    border-radius: 24px;
+    padding: 32px 24px;
+    text-align: center;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+
+  .clinic-hero h2 {
+    font-family: 'Fredoka One', cursive;
+    color: #f5c518;
+    font-size: 1.8rem;
+    margin: 8px 0;
+  }
+
+  .clinic-hero p {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.95rem;
+  }
+
+  .clinic-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    border: 2px solid rgba(26,122,74,0.1);
+  }
+
+  .clinic-card h3 {
+    font-family: 'Fredoka One', cursive;
+    color: var(--verde);
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+
+  .clinic-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .clinic-step {
+    text-align: center;
+    padding: 16px 8px;
+    background: rgba(26,122,74,0.05);
+    border-radius: 16px;
+  }
+
+  .clinic-step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--verde);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    font-size: 0.9rem;
+  }
+
+  .clinic-step-text {
+    font-size: 0.78rem;
+    color: var(--marrom);
+    line-height: 1.3;
+  }
+
+  .clinic-form-group {
+    margin-bottom: 14px;
+  }
+
+  .clinic-form-group label {
+    display: block;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.8rem;
+    color: var(--marrom);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .clinic-form-group input,
+  .clinic-form-group select,
+  .clinic-form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e8e0d0;
+    border-radius: 12px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.95rem;
+    color: var(--marrom);
+    background: white;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+
+  .clinic-form-group input:focus,
+  .clinic-form-group select:focus,
+  .clinic-form-group textarea:focus {
+    border-color: var(--verde);
+  }
+
+  .clinic-form-group textarea {
+    height: 100px;
+    resize: vertical;
+  }
+
+  .clinic-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .clinic-submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--verde), #0f5c35);
+    color: white;
+    border: none;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #093d22;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+
+  .clinic-submit-btn:hover { transform: translateY(-2px); }
+  .clinic-submit-btn:active { transform: translateY(2px); box-shadow: none; }
+
+  .clinic-warning {
+    background: #fff8e1;
+    border: 2px solid #f5c518;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 0.82rem;
+    color: var(--marrom);
+    line-height: 1.5;
+    margin-top: 16px;
+  }
+
+  .clinic-criteria {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+
+  .clinic-criteria-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--marrom);
+    padding: 10px;
+    background: rgba(26,122,74,0.05);
+    border-radius: 12px;
+  }
+
+  .urgency-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .urgency-pill {
+    padding: 8px 18px;
+    border-radius: 30px;
+    border: 2px solid #e8e0d0;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.8rem;
+    cursor: pointer;
+    background: white;
+    color: var(--marrom);
+    transition: all 0.2s;
+  }
+
+  .urgency-pill.active { border-color: var(--verde); background: rgba(26,122,74,0.1); color: var(--verde); }
+  .urgency-pill[data-urgency="urgent"].active { border-color: #e8621a; background: rgba(232,98,26,0.1); color: #e8621a; }
+
+  @media (max-width: 640px) {
+    .clinic-steps { grid-template-columns: repeat(2, 1fr); }
+    .clinic-form-row { grid-template-columns: 1fr; }
+    .clinic-criteria { grid-template-columns: 1fr; }
+  }
+
   .game-wrapper {
     max-width: 900px;
     margin: 0 auto;
@@ -2233,6 +2435,7 @@
   <div class="tab-nav">
     <button class="tab-btn active" id="tabShop" onclick="switchTab('shop')">🛒 Loja</button>
     <button class="tab-btn" id="tabGame" onclick="switchTab('game')">🎮 Jogo</button>
+    <button class="tab-btn" id="tabClinic" onclick="switchTab('clinic')">🏥 Clínicas</button>
   </div>
 </header>
 
@@ -2792,6 +2995,148 @@
         <div class="score-item-value green" id="scoreBoardDiscount">0%</div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- CLINIC SECTION -->
+<div id="clinicSection">
+  <div class="clinic-wrapper">
+
+    <div class="clinic-hero">
+      <div style="font-size:3rem;">🏥</div>
+      <h2>Área para Clínicas e Veterinários</h2>
+      <p>Solicite apoio financeiro para procedimentos realizados em gatos de abrigos parceiros.</p>
+    </div>
+
+    <!-- COMO FUNCIONA -->
+    <div class="clinic-card">
+      <h3>🧭 Como funciona</h3>
+      <div class="clinic-steps">
+        <div class="clinic-step">
+          <div class="clinic-step-num">1</div>
+          <div class="clinic-step-text">O Fundo Solidário recebe doações dos usuários</div>
+        </div>
+        <div class="clinic-step">
+          <div class="clinic-step-num">2</div>
+          <div class="clinic-step-text">Clínicas e veterinários solicitam apoio para procedimentos</div>
+        </div>
+        <div class="clinic-step">
+          <div class="clinic-step-num">3</div>
+          <div class="clinic-step-text">A solicitação é analisada pela equipe</div>
+        </div>
+        <div class="clinic-step">
+          <div class="clinic-step-num">4</div>
+          <div class="clinic-step-text">Se aprovada, o pagamento é feito à clínica</div>
+        </div>
+      </div>
+      <div class="clinic-warning">
+        ⚠️ Os pagamentos são realizados exclusivamente para clínicas mediante <strong>CNPJ</strong> e <strong>nota fiscal</strong>. Não realizamos transferências para pessoas físicas.
+      </div>
+    </div>
+
+    <!-- CRITÉRIOS -->
+    <div class="clinic-card">
+      <h3>📋 Critérios para aprovação</h3>
+      <div class="clinic-criteria">
+        <div class="clinic-criteria-item">✅ Procedimento vinculado a abrigo parceiro</div>
+        <div class="clinic-criteria-item">✅ Orçamento compatível com valor de mercado</div>
+        <div class="clinic-criteria-item">✅ Depende da disponibilidade do Fundo Solidário</div>
+        <div class="clinic-criteria-item">✅ Valor máximo por solicitação pode ser limitado</div>
+      </div>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div class="clinic-card">
+      <h3>📝 Formulário de Solicitação</h3>
+
+      <div style="font-family:'Fredoka One',cursive;color:var(--verde);font-size:0.95rem;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid rgba(26,122,74,0.15);">🏥 Dados da Clínica</div>
+
+      <div class="clinic-form-row">
+        <div class="clinic-form-group">
+          <label>Nome da Clínica</label>
+          <input type="text" id="clinicName" placeholder="Ex: Clínica Vet Copacabana">
+        </div>
+        <div class="clinic-form-group">
+          <label>CNPJ</label>
+          <input type="text" id="clinicCnpj" placeholder="00.000.000/0000-00" oninput="formatCnpj(this)">
+        </div>
+      </div>
+      <div class="clinic-form-row">
+        <div class="clinic-form-group">
+          <label>Responsável Técnico</label>
+          <input type="text" id="clinicResponsavel" placeholder="Dr(a). Nome Completo">
+        </div>
+        <div class="clinic-form-group">
+          <label>CRMV</label>
+          <input type="text" id="clinicCrmv" placeholder="CRMV-RJ 00000">
+        </div>
+      </div>
+      <div class="clinic-form-row">
+        <div class="clinic-form-group">
+          <label>Email</label>
+          <input type="email" id="clinicEmail" placeholder="contato@clinica.com.br">
+        </div>
+        <div class="clinic-form-group">
+          <label>Telefone</label>
+          <input type="tel" id="clinicTelefone" placeholder="(21) 99999-9999" oninput="formatPhone(this)">
+        </div>
+      </div>
+
+      <div style="font-family:'Fredoka One',cursive;color:var(--verde);font-size:0.95rem;margin:20px 0 14px;padding-bottom:8px;border-bottom:2px solid rgba(26,122,74,0.15);">🩺 Dados do Procedimento</div>
+
+      <div class="clinic-form-row">
+        <div class="clinic-form-group">
+          <label>Nome do Abrigo</label>
+          <input type="text" id="clinicAbrigo" placeholder="Ex: Gatinhos da Lapa">
+        </div>
+        <div class="clinic-form-group">
+          <label>Tipo de Procedimento</label>
+          <select id="clinicProcedimento">
+            <option value="">Selecione...</option>
+            <option value="castracao">✂️ Castração</option>
+            <option value="vacinacao">💉 Vacinação</option>
+            <option value="cirurgia">🚨 Cirurgia Urgente</option>
+            <option value="infeccao">🩻 Tratamento de Infecção</option>
+            <option value="resgate">🩹 Recuperação Pós-Resgate</option>
+            <option value="exame">🔬 Exame de Sangue</option>
+          </select>
+        </div>
+      </div>
+      <div class="clinic-form-row">
+        <div class="clinic-form-group">
+          <label>Quantidade de Animais</label>
+          <input type="number" id="clinicQtd" placeholder="1" min="1">
+        </div>
+        <div class="clinic-form-group">
+          <label>Valor Solicitado (R$)</label>
+          <input type="text" id="clinicValor" placeholder="R$ 0,00" oninput="formatMoney(this)">
+        </div>
+      </div>
+
+      <div class="clinic-form-group">
+        <label>Descrição do Caso</label>
+        <textarea id="clinicDescricao" placeholder="Descreva brevemente o caso, condição dos animais e procedimento necessário..."></textarea>
+      </div>
+
+      <div class="clinic-form-group">
+        <label>Grau de Urgência</label>
+        <div class="urgency-pills">
+          <div class="urgency-pill" data-urgency="preventive" onclick="selectUrgency(this)">🟢 Preventivo</div>
+          <div class="urgency-pill" data-urgency="moderate" onclick="selectUrgency(this)">🟡 Moderado</div>
+          <div class="urgency-pill" data-urgency="urgent" onclick="selectUrgency(this)">🔴 Urgente</div>
+        </div>
+      </div>
+
+      <div class="clinic-form-group">
+        <label>Upload de Orçamento (PDF ou imagem)</label>
+        <input type="file" id="clinicFile" accept=".pdf,.jpg,.jpeg,.png" style="padding:10px;">
+      </div>
+
+      <button class="clinic-submit-btn" onclick="submitClinicForm()">🏥 Solicitar Apoio</button>
+
+      <div id="clinicFormMsg" style="display:none;margin-top:14px;padding:14px 18px;border-radius:12px;text-align:center;font-family:'Fredoka One',cursive;"></div>
+    </div>
+
   </div>
 </div>
 
@@ -4517,8 +4862,10 @@
   function switchTab(tab) {
     document.getElementById('tabShop').classList.toggle('active', tab === 'shop');
     document.getElementById('tabGame').classList.toggle('active', tab === 'game');
+    document.getElementById('tabClinic').classList.toggle('active', tab === 'clinic');
     document.getElementById('shopContent').style.display = tab === 'shop' ? 'block' : 'none';
     document.getElementById('gameSection').style.display = tab === 'game' ? 'block' : 'none';
+    document.getElementById('clinicSection').style.display = tab === 'clinic' ? 'block' : 'none';
     if (tab === 'game') initGameClouds();
     if (tab === 'shop' && gameRunning) pauseGame();
   }
@@ -5049,6 +5396,137 @@
 
   function scrollToCart() {
     document.getElementById('cartSection').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ---- CLINIC FUNCTIONS ----
+  var selectedUrgency = '';
+
+  function selectUrgency(el) {
+    document.querySelectorAll('.urgency-pill').forEach(function(p) { p.classList.remove('active'); });
+    el.classList.add('active');
+    selectedUrgency = el.dataset.urgency;
+  }
+
+  function formatCnpj(input) {
+    var v = input.value.replace(/\D/g, '');
+    if (v.length > 14) v = v.slice(0,14);
+    if (v.length > 12) v = v.slice(0,2) + '.' + v.slice(2,5) + '.' + v.slice(5,8) + '/' + v.slice(8,12) + '-' + v.slice(12);
+    else if (v.length > 8) v = v.slice(0,2) + '.' + v.slice(2,5) + '.' + v.slice(5,8) + '/' + v.slice(8);
+    else if (v.length > 5) v = v.slice(0,2) + '.' + v.slice(2,5) + '.' + v.slice(5);
+    else if (v.length > 2) v = v.slice(0,2) + '.' + v.slice(2);
+    input.value = v;
+  }
+
+  function formatPhone(input) {
+    var v = input.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0,11);
+    if (v.length > 6) v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+    else if (v.length > 2) v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+    input.value = v;
+  }
+
+  function formatMoney(input) {
+    var v = input.value.replace(/\D/g, '');
+    if (v.length === 0) { input.value = ''; return; }
+    var num = parseInt(v) / 100;
+    input.value = 'R$ ' + num.toFixed(2).replace('.', ',');
+  }
+
+  function submitClinicForm() {
+    var msgEl = document.getElementById('clinicFormMsg');
+    var fields = {
+      nome: document.getElementById('clinicName').value.trim(),
+      cnpj: document.getElementById('clinicCnpj').value.trim(),
+      responsavel: document.getElementById('clinicResponsavel').value.trim(),
+      crmv: document.getElementById('clinicCrmv').value.trim(),
+      email: document.getElementById('clinicEmail').value.trim(),
+      telefone: document.getElementById('clinicTelefone').value.trim(),
+      abrigo: document.getElementById('clinicAbrigo').value.trim(),
+      procedimento: document.getElementById('clinicProcedimento').value,
+      qtd: document.getElementById('clinicQtd').value,
+      valor: document.getElementById('clinicValor').value.trim(),
+      descricao: document.getElementById('clinicDescricao').value.trim(),
+      urgencia: selectedUrgency
+    };
+
+    // Validação
+    var missing = [];
+    if (!fields.nome) missing.push('Nome da Clínica');
+    if (!fields.cnpj) missing.push('CNPJ');
+    if (!fields.responsavel) missing.push('Responsável');
+    if (!fields.crmv) missing.push('CRMV');
+    if (!fields.email) missing.push('Email');
+    if (!fields.procedimento) missing.push('Tipo de Procedimento');
+    if (!fields.valor) missing.push('Valor');
+    if (!fields.urgencia) missing.push('Grau de Urgência');
+
+    if (missing.length > 0) {
+      msgEl.style.display = 'block';
+      msgEl.style.background = '#fff3e0';
+      msgEl.style.color = '#e8621a';
+      msgEl.style.border = '2px solid #e8621a';
+      msgEl.textContent = '⚠️ Preencha: ' + missing.join(', ');
+      return;
+    }
+
+    // Mapeia procedimento ao fundo correspondente
+    var fundMap = {
+      'castracao': 'Castração Solidária',
+      'vacinacao': 'Vacinação',
+      'cirurgia': 'Fundo Emergencial',
+      'infeccao': 'Fundo Emergencial',
+      'resgate': 'Fundo Emergencial',
+      'exame': 'Fundo Emergencial'
+    };
+    fields.fundo = fundMap[fields.procedimento] || 'Fundo Solidário';
+
+    // Envia email com a solicitação
+    var emailBody = '<h2 style="color:#1a7a4a;">🏥 Nova Solicitação de Apoio</h2>' +
+      '<p><strong>Clínica:</strong> ' + fields.nome + '</p>' +
+      '<p><strong>CNPJ:</strong> ' + fields.cnpj + '</p>' +
+      '<p><strong>Responsável:</strong> ' + fields.responsavel + ' (CRMV: ' + fields.crmv + ')</p>' +
+      '<p><strong>Email:</strong> ' + fields.email + '</p>' +
+      '<p><strong>Telefone:</strong> ' + fields.telefone + '</p>' +
+      '<hr>' +
+      '<p><strong>Abrigo:</strong> ' + fields.abrigo + '</p>' +
+      '<p><strong>Procedimento:</strong> ' + fields.procedimento + '</p>' +
+      '<p><strong>Fundo vinculado:</strong> ' + fields.fundo + '</p>' +
+      '<p><strong>Animais:</strong> ' + fields.qtd + '</p>' +
+      '<p><strong>Valor:</strong> ' + fields.valor + '</p>' +
+      '<p><strong>Urgência:</strong> ' + fields.urgencia + '</p>' +
+      '<p><strong>Descrição:</strong> ' + fields.descricao + '</p>';
+
+    fetch('/api/clinic', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields: fields, html: emailBody })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      msgEl.style.display = 'block';
+      if (data.success) {
+        msgEl.style.background = '#e8f5e9';
+        msgEl.style.color = '#1a7a4a';
+        msgEl.style.border = '2px solid #1a7a4a';
+        msgEl.textContent = '✅ Solicitação enviada com sucesso! Entraremos em contato pelo email informado.';
+        // Limpa form
+        document.querySelectorAll('#clinicSection input, #clinicSection textarea, #clinicSection select').forEach(function(el) { el.value = ''; });
+        document.querySelectorAll('.urgency-pill').forEach(function(p) { p.classList.remove('active'); });
+        selectedUrgency = '';
+      } else {
+        msgEl.style.background = '#fff3e0';
+        msgEl.style.color = '#e8621a';
+        msgEl.style.border = '2px solid #e8621a';
+        msgEl.textContent = '❌ Erro ao enviar: ' + (data.error || 'Tente novamente');
+      }
+    })
+    .catch(function(err) {
+      msgEl.style.display = 'block';
+      msgEl.style.background = '#fff3e0';
+      msgEl.style.color = '#e8621a';
+      msgEl.style.border = '2px solid #e8621a';
+      msgEl.textContent = '❌ Erro de conexão. Tente novamente.';
+    });
   }
 
   // Verifica se voltou do Mercado Pago com pagamento aprovado
