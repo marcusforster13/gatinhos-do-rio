@@ -633,20 +633,37 @@
   }
 
   /* SHELTER SELECTOR */
+  .section-header {
+    background: linear-gradient(135deg, rgba(26,122,74,0.08) 0%, rgba(245,197,24,0.08) 100%);
+    border-radius: 20px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(26,122,74,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+
+  .section-header.green {
+    background: linear-gradient(135deg, rgba(26,122,74,0.12) 0%, rgba(26,122,74,0.04) 100%);
+    border-color: rgba(26,122,74,0.15);
+  }
+
   .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem;
     color: var(--marrom);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     display: flex;
     align-items: center;
     gap: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
   }
 
   .section-subtitle {
     color: #888;
-    font-size: 0.9rem;
-    margin-bottom: 20px;
+    font-size: 0.88rem;
+    margin-bottom: 0;
+    line-height: 1.4;
   }
 
   .shelters-grid {
@@ -2480,8 +2497,10 @@
 <main>
 
   <!-- SHELTER SELECTION -->
-  <div class="section-title">🏠 Escolha um abrigo do Rio</div>
-  <div class="section-subtitle">Todos os itens serão entregues diretamente ao abrigo escolhido</div>
+  <div class="section-header">
+    <div class="section-title">🏠 Escolha um Abrigo do Rio</div>
+    <div class="section-subtitle">Ajude diretamente um projeto da sua cidade — os itens serão entregues ao abrigo escolhido</div>
+  </div>
 
   <div class="shelters-grid" id="shelterGrid">
     <div class="shelter-card" onclick="selectShelter(this, 'Gatinhos da Lapa')" data-shelter="Gatinhos da Lapa">
@@ -2523,8 +2542,10 @@
   </div>
 
   <!-- STORE SHELVES -->
-  <div class="section-title">🛒 Prateleiras do Armazém</div>
-  <div class="section-subtitle">Clique nos itens para adicionar à sua cesta de doação</div>
+  <div class="section-header">
+    <div class="section-title">🛒 Prateleiras do Armazém</div>
+    <div class="section-subtitle">Clique nos itens para adicionar à sua cesta de doação</div>
+  </div>
   <div class="gami-badge">🎮 Preencha a cesta e ganhe pontos + raffle!</div>
 
   <div class="store-container">
@@ -2779,8 +2800,10 @@
   </div>
 
   <!-- SEÇÃO FUNDO SOLIDÁRIO -->
-  <div class="section-title" style="margin-top:32px;">💚 Centro de Cuidados Solidários</div>
-  <div class="section-subtitle">Cotas e serviços administrados diretamente pela equipe Gatinhos do Rio — não vão ao abrigo, vão pro fundo de cuidados veterinários</div>
+  <div class="section-header green" style="margin-top:32px;">
+    <div class="section-title" style="color:#1a7a4a;">💚 Centro de Cuidados Solidários</div>
+    <div class="section-subtitle">Cotas e serviços administrados pela equipe Gatinhos do Rio — destinados ao fundo de cuidados veterinários</div>
+  </div>
 
   <div class="store-container clinic-store">
     <div class="store-bg clinic-bg">
@@ -2915,8 +2938,10 @@
 
   <!-- CART -->
   <div id="cartSection">
-    <div class="section-title">🛒 Sua Cesta de Doação</div>
-    <div class="section-subtitle" id="shelterSelectedMsg">Selecione um abrigo acima antes de finalizar</div>
+    <div class="section-header">
+      <div class="section-title">🛒 Sua Cesta de Doação</div>
+      <div class="section-subtitle" id="shelterSelectedMsg">Selecione um abrigo acima antes de finalizar</div>
+    </div>
 
     <div class="cart-panel">
       <div id="cartContent">
